@@ -2,19 +2,23 @@ terraform {
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
-      version = "~> 3.0.1"
+      version = "~> 3.6.2"
     }
   }
-  required_version = ">=1.8.4" /*Многострочный комментарий.
- Требуемая версия terraform */
+  required_version = ">=1.8.4"
 }
 
-resource "random_password" "random_string" {
-  length      = 16
-  special     = false
-  min_upper   = 1
-  min_lower   = 1
-  min_numeric = 1
+provider "docker" {}
+
+resource "docker_buildx_builder" "remote_docker_builder" {
+  name = "hw_context"
+  use = true
+  connection {
+    host = "ssh://debian@51.250.47.241"
+  }
+  remote {
+    key = "C:\\Users\\loban\\.ssh\\id_rsa"
+  }
 }
 
 resource "docker_image" "nginx" {
@@ -24,7 +28,7 @@ resource "docker_image" "nginx" {
 
 resource "docker_container" "nginx" {
   image = docker_image.nginx.image_id
-  name  = "example_${random_password.random_string.result}"
+  name  = "hello_world"
 
   ports {
     internal = 80
