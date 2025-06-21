@@ -3,7 +3,7 @@ locals {
 
   test_list = ["develop", "staging", "production"]
 
-  test_map = {
+    test_map = {
     admin = "John"
     user  = "Alex"
   }

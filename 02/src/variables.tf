@@ -11,9 +11,9 @@ variable "folder_id" {
   description = "https://cloud.yandex.ru/docs/resource-manager/operations/folder/get-id"
 }
 
-variable "default_zone" {
+variable "zone_yandex_ru_central_d" {
   type        = string
-  default     = "ru-central1-a"
+  default     = "ru-central1-d"
   description = "https://cloud.yandex.ru/docs/overview/concepts/geo-scope"
 }
 variable "default_cidr" {
@@ -35,4 +35,11 @@ variable "vms_ssh_root_key" {
   type        = string
   default     = "<your_ssh_ed25519_key>"
   description = "ssh-keygen -t ed25519"
+}
+
+
+variable "yc_public_key" {
+  type        = string
+  default     = "<your_yc_public_key>"
+  description = "https://yandex.cloud/ru/docs/iam/operations/iam-token/create-for-sa#api_1"
 }
