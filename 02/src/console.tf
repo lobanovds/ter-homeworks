@@ -3,7 +3,7 @@ locals {
 
   test_list = ["develop", "staging", "production"]
 
-    test_map = {
+  test_map = {
     admin = "John"
     user  = "Alex"
   }
@@ -30,8 +30,8 @@ locals {
 
   }
 
-  user_server = keys(local.servers)[1]
-  user_data = local.servers[local.user_server]
+  user_server     = keys(local.servers)[1]
+  user_data       = local.servers[local.user_server]
   interpol_phrase = "${local.test_map.admin} is ${keys(local.test_map)[0]} for ${local.user_server} server based on OS ${local.user_data.image} with ${local.user_data.cpu} VCPU ${local.user_data.ram} RAM and [${join(", ", local.user_data.disks)}] virtual disks"
 }
 
