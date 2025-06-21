@@ -4,6 +4,7 @@ variable "ssh_root_key" {
   type        = string
   default     = "<your_ssh_ed25519_key>"
   description = "ssh-keygen -t ed25519"
+  sensitive = true
 }
 
 
