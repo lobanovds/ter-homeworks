@@ -21,3 +21,8 @@ variable "zone_yandex_ru_central_b" {
   description = "https://cloud.yandex.ru/docs/overview/concepts/geo-scope"
 }
 
+variable "vpc_name" {
+  type        = string
+  default     = "develop"
+  description = "VPC network & subnet name"
+}

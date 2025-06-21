@@ -1,91 +1,85 @@
 resource "yandex_vpc_network" "develop" {
-  name = "develop"
+  name = var.vpc_name
 }
 
 resource "yandex_vpc_subnet" "develop_d" {
-  name           = "develop-ru-central1-d"
+  name           = "${var.vpc_name}-${var.zone_yandex_ru_central_d}"
   zone           = var.zone_yandex_ru_central_d
   network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = var.vm_web_default_cidr
+  v4_cidr_blocks = var.vms_resources.web.cidr
 }
 
 
 resource "yandex_vpc_subnet" "develop_b" {
-  name           = "develop-ru-central1-b"
+  name           = "${var.vpc_name}-${var.zone_yandex_ru_central_b}"
   zone           = var.zone_yandex_ru_central_b
   network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = var.vm_db_default_cidr
+  v4_cidr_blocks = var.vms_resources.db.cidr
 }
 
 data "yandex_compute_image" "ubuntu" {
-  family = var.vm_web_yandex_compute_image
+  family = var.yandex_compute_image
 }
 
 
 
 resource "yandex_compute_instance" "platform-db" {
-  name        = var.vm_db_yandex_compute_instance
-  hostname    = var.vm_db_yandex_compute_instance
-  platform_id = var.vm_db_platform_id
-  zone           = var.zone_yandex_ru_central_b
+  name        = local.vm_db_name
+  hostname    = local.vm_db_name
+  platform_id = var.vms_resources.db.platform_id
+  zone        = var.vms_resources.db.zone
 
   resources {
-    cores         = var.vm_db_cores
-    memory        = var.vm_db_memory
-    core_fraction = var.vm_db_core_fraction
+    cores         = var.vms_resources.db.cores
+    memory        = var.vms_resources.db.memory
+    core_fraction = var.vms_resources.db.core_fraction
   }
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.image_id
-      type     = var.vm_db_boot_disk_type
-      size     = var.vm_db_boot_disk_size
+      type     = var.vms_resources.db.disk_type
+      size     = var.vms_resources.db.disk_size
     }
   }
   scheduling_policy {
-    preemptible = var.vm_db_is_preemptible
+    preemptible = var.vms_resources.db.is_preemtable
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.develop_b.id
-    nat       = var.vm_db_is_nat
+    nat       = var.vms_resources.db.is_nat
   }
 
-  metadata = {
-    serial-port-enable = var.vm_db_is_serial_port_enabled
-    ssh-keys           = "${var.vm_db_image_user}:${var.vm_db_ssh_root_key}"
-  }
+  metadata = local.metadata
 
 }
 
 
 
 resource "yandex_compute_instance" "platform-d" {
-  name        = var.vm_web_yandex_compute_instance
-  hostname    = var.vm_web_yandex_compute_instance
-  platform_id = var.vm_web_platform_id
-  zone           = var.zone_yandex_ru_central_d
+  name        = local.vm_web_name
+  hostname    = local.vm_web_name
+  platform_id = var.vms_resources.web.platform_id
+  zone        = var.vms_resources.web.zone
   resources {
-    cores         = var.vm_web_cores
-    memory        = var.vm_web_memory
-    core_fraction = var.vm_web_core_fraction
+    cores         = var.vms_resources.web.cores
+    memory        = var.vms_resources.web.memory
+    core_fraction = var.vms_resources.web.core_fraction
   }
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.image_id
-      type     = var.vm_web_boot_disk_type
-      size     = var.vm_web_boot_disk_size
+      type     = var.vms_resources.web.disk_type
+      size     = var.vms_resources.web.disk_size
     }
   }
   scheduling_policy {
-    preemptible = var.vm_web_is_preemptible
+    preemptible = var.vms_resources.web.is_preemtable
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.develop_d.id
-    nat       = var.vm_web_is_nat
+    nat       = var.vms_resources.web.is_nat
   }
 
-  metadata = {
-    serial-port-enable = var.vm_web_is_serial_port_enabled
-    ssh-keys           = "${var.vm_web_image_user}:${var.vm_web_ssh_root_key}"
-  }
+  metadata = local.metadata
 
 }
