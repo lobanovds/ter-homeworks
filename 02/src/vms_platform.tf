@@ -1,88 +1,80 @@
-###cloud vars
 
-
-variable "vm_web_default_cidr" {
+variable "vm_db_default_cidr" {
   type        = list(string)
-  default     = ["10.0.1.0/24"]
+  default     = ["10.0.2.0/24"]
   description = "https://cloud.yandex.ru/docs/vpc/operations/subnet-create"
 }
 
+###VM vars
 
-variable "vm_web_yandex_compute_image" {
+variable "vm_db_yandex_compute_instance" {
   type        = string
-  default     = "ubuntu-2004-lts"
-  description = "Образ, из которого мы будем собирать виртуалку"
-}
-
-variable "vm_web_yandex_compute_instance" {
-  type        = string
-  default     = "netology-develop-platform-web-d"
+  default     = "netology-develop-platform-web-db"
   description = "имя и хост виртуалки"
 }
 
-variable "vm_web_platform_id" {
+variable "vm_db_platform_id" {
   type        = string
   default     = "standard-v3"
   description = "Платформа"
 }
 
-variable "vm_web_cores" {
+variable "vm_db_cores" {
   type        = number
   default     = 2
   description = "Число ядер"
 }
 
-variable "vm_web_memory" {
+variable "vm_db_memory" {
   type        = number
-  default     = 1
+  default     = 2
   description = "Объём ОЗУ в ГБ(целое число)"
 }
 
-variable "vm_web_core_fraction" {
+variable "vm_db_core_fraction" {
   type        = number
   default     = 20
   description = "Минимальный гарантированный процент нагрузки процессора"
 }
 
-variable "vm_web_boot_disk_type" {
+variable "vm_db_boot_disk_type" {
   type        = string
   default     = "network-hdd"
   description = "https://yandex.cloud/ru/docs/compute/concepts/disk"
 }
 
-variable "vm_web_boot_disk_size" {
+variable "vm_db_boot_disk_size" {
   type        = number
   default     = 5
   description = "размер диска"
 }
 
-variable "vm_web_is_preemptible" {
+variable "vm_db_is_preemptible" {
   type        = bool
   default     = true
   description = "Прерываемая ВМ"
 }
 
-variable "vm_web_is_nat" {
+variable "vm_db_is_nat" {
   type        = bool
   default     = true
   description = "Нужен ли внешний IP"
 }
 
-variable "vm_web_is_serial_port_enabled" {
+variable "vm_db_is_serial_port_enabled" {
   type        = number
   default     = 1
   description = "Нужен ли внешний IP"
 }
 
-variable "vm_web_image_user" {
+variable "vm_db_image_user" {
   type        = string
   default     = "ubuntu"
   description = "Нужен ли внешний IP"
 }
 
-###ssh vars
 
-variable "vm_web_ssh_root_key" {
+variable "vm_db_ssh_root_key" {
   type        = string
   default     = "<your_ssh_ed25519_key>"
   description = "ssh-keygen -t ed25519"
