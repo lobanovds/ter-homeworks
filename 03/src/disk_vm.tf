@@ -6,8 +6,8 @@ resource "yandex_compute_disk" "secondary" {
 }
 
 resource "yandex_compute_instance" "storage" {
-  name        = "storage"
-  hostname    = "storage"
+  name        = local.vm_storage_name
+  hostname    = local.vm_storage_name
   platform_id = var.vms_resources.default_minimal.platform_id
   zone        = var.vms_resources.default_minimal.zone
   resources {

@@ -1,4 +1,3 @@
-
 data "yandex_compute_image" "ubuntu" {
   family = var.yandex_compute_image
 }
@@ -7,8 +6,8 @@ data "yandex_compute_image" "ubuntu" {
 resource "yandex_compute_instance" "web" {
   depends_on = [yandex_compute_instance.db]
   count       = 2
-  name        = "${local.vm_web_name}-${count.index+1}"
-  hostname    = "${local.vm_web_name}-${count.index+1}"
+  name = "${local.vm_web_name}-${count.index+1}"
+  # hostname    = "${local.vm_web_name}-${count.index+1}"
   platform_id = var.vms_resources.default_minimal.platform_id
   zone        = var.vms_resources.default_minimal.zone
   resources {

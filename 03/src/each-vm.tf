@@ -1,7 +1,7 @@
 resource "yandex_compute_instance" "db" {
   for_each    = {for index, value in var.each_vm : index => value}
-  name        = each.value.vm_name
-  hostname    = each.value.vm_name
+  name        = "${local.vm_db_name}-${each.value.vm_name}"
+  hostname    = "${local.vm_db_name}-${each.value.vm_name}"
   platform_id = var.vms_resources.default_minimal.platform_id
   zone        = var.vms_resources.default_minimal.zone
   resources {
@@ -20,11 +20,10 @@ resource "yandex_compute_instance" "db" {
   scheduling_policy {
     preemptible = var.vms_resources.default_minimal.is_preemtable
   }
-  
+
   network_interface {
     subnet_id = yandex_vpc_subnet.db[each.key].id
   }
 
   metadata = local.metadata
-
 }

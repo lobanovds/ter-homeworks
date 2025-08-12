@@ -1,0 +1,15 @@
+all:
+  hosts:%{~ for instance_name, webservers in instances }
+    ${instance_name}:%{~ for server in webservers }
+      ${server.name}:
+        ansible_host: ${(server.network_interface[0].nat_ip_address != "" && bastion == null) ?server.network_interface[0].nat_ip_address: server.network_interface[0].ip_address}
+        ansible_user: ubuntu
+        fqdn: ${try(server.fqdn, "")}
+      %{ endfor }
+    %{ endfor }
+    %{~ if bastion != null ~}
+    bastion:
+      ansible_host: ${bastion.network_interface[0].nat_ip_address != "" ?bastion.network_interface[0].nat_ip_address: bastion.network_interface[0].ip_address}
+      ansible_user: ubuntu
+      fqdn: ${try(bastion.fqdn, "")}
+    %{~ endif ~}
