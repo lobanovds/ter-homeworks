@@ -1,11 +1,3 @@
-resource "yandex_vpc_subnet" "db" {
-  count      = 2
-  name       = "${var.vpc_name}-${var.default_zone}-db-${count.index + 1}"
-  zone       = var.default_zone
-  network_id = yandex_vpc_network.develop.id
-  v4_cidr_blocks = ["10.0.2${count.index + 1 }.0/24"]
-}
-
 resource "yandex_compute_instance" "db" {
   for_each    = {for index, value in var.each_vm : index => value}
   name        = each.value.vm_name
@@ -25,13 +17,12 @@ resource "yandex_compute_instance" "db" {
     }
   }
 
-
   scheduling_policy {
     preemptible = var.vms_resources.default_minimal.is_preemtable
   }
+  
   network_interface {
     subnet_id = yandex_vpc_subnet.db[each.key].id
-    # security_group_ids = [yandex_vpc_security_group.example.id]
   }
 
   metadata = local.metadata
