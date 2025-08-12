@@ -30,6 +30,15 @@ resource "yandex_compute_instance" "web" {
       size     = var.vms_resources.default_minimal.disk_size
     }
   }
+  dynamic "secondary_disk" {
+    iterator = inner
+    for_each = count.index == 0 ? flatten([yandex_compute_disk.automatic, yandex_compute_disk.storage]) : []
+    content {
+      device_name = inner.value.name
+      disk_id     = inner.value.id
+      mode        = "READ_WRITE"
+    }
+  }
   scheduling_policy {
     preemptible = var.vms_resources.default_minimal.is_preemtable
   }

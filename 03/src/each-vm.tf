@@ -24,6 +24,8 @@ resource "yandex_compute_instance" "db" {
       size     = each.value.disk_volume
     }
   }
+
+
   scheduling_policy {
     preemptible = var.vms_resources.default_minimal.is_preemtable
   }
